@@ -1,19 +1,15 @@
-import express from 'express';
-import http from 'http';
+import 'reflect-metadata';
 import { Server } from 'socket.io';
-import { PORT } from './config/config';
-import { setupSocketHandlers } from './handlers/socketHandler';
 
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server();
 
-app.get('/', (req, res) => {
-    res.send('Socket.IO server is running');
+io.on('connection', (socket) => {
+    console.log('a user connected');
 });
 
-setupSocketHandlers(io);
-
-server.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+io.on('disconnect', () => {
+    console.log('a user disconnected');
 });
+
+io.listen(3000);
+console.log('listening on *:3000');
